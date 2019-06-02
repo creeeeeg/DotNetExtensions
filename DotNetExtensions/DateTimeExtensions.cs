@@ -16,28 +16,32 @@ public static class DateTimeExtensions
         var now = DateTime.Now;
         var output = string.Empty;
         var diff = now - value;
-        var secs = Math.Abs(Math.Round(diff.TotalSeconds));
-        var mins = Math.Abs(Math.Round(diff.TotalMinutes));
-        var hrs = Math.Abs(Math.Round(diff.TotalHours));
+        var secs = Math.Round(Math.Abs(diff.TotalSeconds));
+        var mins = Math.Round(Math.Abs(diff.TotalMinutes));
+        var hrs = Math.Round(Math.Abs(diff.TotalHours));
         var yesterday = DateTime.Today.AddDays(-1);
         var tomorrow = DateTime.Today.AddDays(1);
 
         var flair = addFlair ? (prefix, suffix) : (prefix: string.Empty, suffix: string.Empty);
 
-        if (secs < 60)
+        if (Math.Abs(diff.TotalSeconds) < 1.0)
         {
-            output = mins.ToString() + "s";
+            output = "now";
+        }
+        else if (secs < 60.0)
+        {
+            output = secs.ToString() + "s";
             output = (diff.TotalSeconds > 0) ? output + flair.suffix : flair.prefix + output;
         }
-        else if (mins < 60)
+        else if (mins < 60.0)
         {
             output = mins.ToString() + "m";
             output = (diff.TotalMinutes > 0) ? output + flair.suffix : flair.prefix + output;
         }
-        else if (hrs > 1 && hrs < 24 && diff != TimeSpan.FromDays(1))
+        else if (hrs > 1.0 && hrs < 24.0 && diff != TimeSpan.FromDays(1.0))
         {
             output = hrs.ToString() + "h";
-            output = (diff.TotalHours > 0) ? output + flair.suffix : flair.prefix + output;
+            output = (diff.TotalHours > 0.0) ? output + flair.suffix : flair.prefix + output;
         }
         else if (value >= yesterday && value <= tomorrow)
         {
